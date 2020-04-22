@@ -1,5 +1,9 @@
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
+
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +29,7 @@ public class JsonMocker {
     };
     RandomOptionGroup<String>  areaOptionGroup= new RandomOptionGroup(areaOpts);
 
-    String appId="gmall2019";
+    String appId="gmall0105";
 
     RanOpt[] vsOpts= {new RanOpt("1.2.0",50),new RanOpt("1.1.2",15),
             new RanOpt("1.1.3",30),
@@ -34,8 +38,8 @@ public class JsonMocker {
 
     RandomOptionGroup<String>  vsOptionGroup= new RandomOptionGroup(vsOpts);
 
-    RanOpt[] eventOpts= {new RanOpt("addFavor",10),new RanOpt("addComment",30),
-            new RanOpt("addCart",20), new RanOpt("clickItem",40)
+    RanOpt[] eventOpts= {new RanOpt("addFavor",10),new RanOpt("addComment",15),
+            new RanOpt("addCart",20), new RanOpt("clickItem",1) ,new RanOpt("coupon",45)
     };
 
     RandomOptionGroup<String>  eventOptionGroup= new RandomOptionGroup(eventOpts);
@@ -47,7 +51,7 @@ public class JsonMocker {
 
     RandomOptionGroup<String>  channelOptionGroup= new RandomOptionGroup(channelOpts);
 
-    RanOpt[] quitOpts= {   new RanOpt(true,20),new RanOpt(false,80)};
+    RanOpt[] quitOpts= {   new RanOpt(true,5),new RanOpt(false,95)};
 
     RandomOptionGroup<Boolean>  isQuitGroup= new RandomOptionGroup(quitOpts);
 
@@ -87,7 +91,7 @@ public class JsonMocker {
         String evid = eventOptionGroup.getRandomOpt().getValue();
         int pgid = new Random().nextInt(50)+1;
         int npgid = new Random().nextInt(50)+1;
-        int itemid = new Random().nextInt(50);
+        int itemid = RandomNum.getRandInt(10,80);
         //  long ts= logDateUtil.getRandomDate().getTime();
 
         JSONObject jsonObject = new JSONObject();
@@ -116,8 +120,8 @@ public class JsonMocker {
      `area` string COMMENT '城市' */
 
 
-        String mid= "mid_"+ RandomNum.getRandInt(1,500);
-        String uid=""+ RandomNum.getRandInt(1,500);
+        String mid= "mid_"+ RandomNum.getRandInt(1,40);
+        String uid=""+ RandomNum.getRandInt(1,200);
         String os=osOptionGroup.getRandomOpt().getValue();
         String appid=this.appId;
         String area=areaOptionGroup.getRandomOpt().getValue();
@@ -150,7 +154,7 @@ public class JsonMocker {
                 jsonMocker.sendLog(eventLog);
             }
             try {
-                Thread.sleep(10);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -159,10 +163,17 @@ public class JsonMocker {
 
     }
 
+
+
     public void sendLog(String log)   {
         LogUploader.sendLogStream(log);
     }
 
+
+
+
     public static void main(String[] args)  {
         genLog();
-    }}
+    }
+
+}
