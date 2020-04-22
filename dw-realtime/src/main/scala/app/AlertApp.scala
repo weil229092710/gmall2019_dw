@@ -28,6 +28,8 @@ object AlertApp {
 
       val inputDstream: InputDStream[ConsumerRecord[String, String]] = MyKafkaUtil.getKafkaStream(GmallConstants.KAFKA_TOPIC_EVENT,ssc)
 
+
+
     val eventInfoDstream: DStream[EventInfo] = inputDstream.map { record =>
       val eventInfo: EventInfo = JSON.parseObject(record.value(), classOf[EventInfo])
       eventInfo
