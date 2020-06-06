@@ -32,9 +32,11 @@ object SaleApp {
 //     }
 
 
-    val orderDstream: DStream[OrderInfo] = orderRecordDstream.map { record =>
-      val jsonstr: String = record.value()
-      val orderInfo: OrderInfo = JSON.parseObject(jsonstr, classOf[OrderInfo])
+    val orderDstream: DStream[OrderInfo] = orderRecordDstream.map {
+      rdd=>
+
+       val jsonstr: String = rdd.value()
+       val orderInfo: OrderInfo = JSON.parseObject(jsonstr, classOf[OrderInfo])
 
       //补充时间字段
       val datetimeArr: Array[String] = orderInfo.create_time.split(" ")
@@ -46,12 +48,11 @@ object SaleApp {
       val tuple: (String, String) = orderInfo.consignee_tel.splitAt(4)
       orderInfo.consignee_tel = tuple._1 + "*******"
 
-   //  println("主表！！！！"+orderInfo)
+     println("主表！！！！"+orderInfo)
       orderInfo
     }
 
-    val orderInfoWithKeyDstream: DStream[(String, OrderInfo)] = orderDstream.map(orderInfo=>(orderInfo.id,orderInfo))
-
+    val orderInfoWithKeyDstream: DStream[(String, OrderInfo)] = orderDstream.map(orderInfo=> (orderInfo.id,orderInfo))
     val orderDetailDstream: DStream[OrderDetail] = orderDetailRecordDstream.map { record =>
       val jsonstr: String = record.value()
       val orderDetail: OrderDetail = JSON.parseObject(jsonstr, classOf[OrderDetail])
